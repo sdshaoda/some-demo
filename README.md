@@ -6,10 +6,10 @@ This is the mine sweepeing game developed by JavaScript.
 
 这是使用Web前端实现的扫雷游戏
 
+[扫雷](https://sdshaoda.github.io/some-demo/mineSweeper/)
+
 #gobang
 [HTML5 五子棋](https://sdshaoda.github.io/some-demo/gobang/)
-
-[扫雷](https://sdshaoda.github.io/some-demo/mineSweeper/)
 
 ## jigsaw
 [拼图游戏](https://sdshaoda.github.io/some-demo/jinsaw/)
