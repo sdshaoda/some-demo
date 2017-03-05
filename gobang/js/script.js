@@ -5,7 +5,7 @@ var context = chess.getContext('2d')
 // 我先手
 var me = true
 
-window.onload = function () {
+window.onload = function() {
     drawChessBoard();
     chess.addEventListener('click', handleChessClick, false)
 }
@@ -41,7 +41,7 @@ function step(i, j, me) {
     context.beginPath()
     context.arc(15 + i * 30, 15 + j * 30, 13, 0, 2 * Math.PI)
     context.closePath()
-    // 设置渐变色
+        // 设置渐变色
     var gradient = context.createRadialGradient(15 + i * 30 + 2, 15 + j * 30 - 2, 13, 15 + i * 30 + 2, 15 + j * 30 - 2, 0)
     if (me) {
         // 黑子

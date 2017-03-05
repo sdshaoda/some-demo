@@ -1,9 +1,9 @@
 var jms = null,
     timeHandle = null;
-window.onload = function () {
+window.onload = function() {
     var radios = document.getElementsByName("level");
     for (var i = 0, j = radios.length; i < j; i++) {
-        radios[i].onclick = function () {
+        radios[i].onclick = function() {
             if (jms != null)
                 if (jms.landMineCount > 0)
                     if (!confirm("确定结束当前游戏？"))
@@ -27,16 +27,16 @@ function init(rowCount, colCount, minLandMineCount, maxLandMineCount) {
         landMineCountElement.innerHTML = 0;
     }
     jms = JMS("landmine", rowCount, colCount, minLandMineCount, maxLandMineCount);
-    jms.endCallBack = function () {
+    jms.endCallBack = function() {
         clearInterval(timeHandle);
     };
-    jms.landMineCallBack = function (count) {
+    jms.landMineCallBack = function(count) {
         landMineCountElement.innerHTML = count;
     };
 
     //为“开始游戏”按钮绑定事件
-    beginButton.onclick = function () {
-        jms.play();//初始化
+    beginButton.onclick = function() {
+        jms.play(); //初始化
 
         //显示地雷个数
         landMineCountElement.innerHTML = jms.landMineCount;
@@ -45,7 +45,7 @@ function init(rowCount, colCount, minLandMineCount, maxLandMineCount) {
         jms.begin();
 
         //更新花费时间
-        timeHandle = setInterval(function () {
+        timeHandle = setInterval(function() {
             timeShow.innerHTML = parseInt((new Date() - jms.beginTime) / 1000);
         }, 1000);
     };
