@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Promise ball</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .ball {
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
+        }
+        
+        .ball1 {
+            background: yellow;
+            position: absolute;
+            top: 0;
+        }
+        
+        .ball2 {
+            background: red;
+            position: absolute;
+            top: 50px;
+        }
+        
+        .ball3 {
+            background: blue;
+            position: absolute;
+            top: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ball ball1" style="left:0"></div>
+    <div class="ball ball2" style="left:100px"></div>
+    <div class="ball ball3" style="left:200px"></div>
+    <script>
+        var ball1 = document.querySelector('.ball1')
+        var ball2 = document.querySelector('.ball2')
+        var ball3 = document.querySelector('.ball3')
+
+        // 定义普通的移动函数 move
+        // function move(element, position, callback) {
+        //     if (element.style.left != position) {
+        //         var moveId = setInterval(function() {
+        //             if (element.offsetLeft > position) {
+        //                 element.style.left = parseInt(element.style.left) - 1 + 'px'
+        //             } else if (element.offsetLeft < position) {
+        //                 element.style.left = parseInt(element.style.left) + 1 + 'px'
+        //             } else {
+        //                 clearInterval(moveId)
+        //                 callback && callback()
+        //             }
+        //         }, 13)
+        //     }
+        // }        
+
+        // callback 写法
+        // move(ball1, 300, function() {
+        //     move(ball2, 300, function() {
+        //         move(ball3, 300, function() {
+        //             move(ball3, 100, function() {
+        //                 move(ball2, 100, function() {
+        //                     move(ball1, 100, function() {
+        //                         // 
+        //                     })
+        //                 })
+        //             })
+        //         })
+        //     })
+        // })
+
+
+        // Promise 写法，观察与 move 函数有何不同，没有传入 callback
+        function promiseMove(element, position) {
+            // return 一个 Promise 对象
+            return new Promise(function(resolve, reject) {
+                if (element.style.left != position) {
+                    var moveId = setInterval(function() {
+                        if (element.offsetLeft > position) {
+                            element.style.left = parseInt(element.style.left) - 1 + 'px'
+                        } else if (element.offsetLeft < position) {
+                            element.style.left = parseInt(element.style.left) + 1 + 'px'
+                        } else {
+                            clearInterval(moveId);
+                            // 将需要调用 callback 的地方改为了 resolve
+                            resolve();
+                            // callback && callback()
+                        }
+                    }, 13)
+                }
+            })
+        }
+
+        // 使用 Promise 只是将 'callback hell' 改成了 '链式调用'
+        promiseMove(ball1, 300)
+            // .then(resolve), resolve 即是回调函数
+            .then(function() {
+                // 因需要继续回调，继续返回 Promise 对象
+                return promiseMove(ball2, 300)
+            })
+            .then(function() {
+                return promiseMove(ball3, 300)
+            })
+            .then(function() {
+                return promiseMove(ball3, 100)
+            })
+            .then(function() {
+                return promiseMove(ball2, 100)
+            })
+            .then(function() {
+                return promiseMove(ball1, 100)
+            })
+    </script>
+</body>
+
+</html>
