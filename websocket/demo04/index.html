@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <h1>Chat Room</h1>
+  <form id="sendForm">
+    <input id="sendText" type="text" name="" value="">
+    <button id="sendBtn" type="button">发送</button>
+  </form>
+
+  <script src="./socket.io.js"></script>
+  <script>
+    var socket = io('ws://localhost:8000/')
+
+    document.querySelector('#sendBtn').onclick = sendMsg
+    document.querySelector('#sendForm').onsubmit = sendMsg
+
+    socket.on('enter', function (data) {
+      showMsg(data)
+    })
+    socket.on('msg', function (data) {
+      showMsg(data)
+    })
+    socket.on('leave', function (data) {
+      showMsg(data)
+    })
+
+    function sendMsg(e) {
+      // 此处为了阻止表单的默认提交
+      e.preventDefault()
+      e.stopPropagation()
+      var text = document.querySelector('#sendText').value
+      if (text) {
+        socket.emit('msg', text)
+      }
+    }
+
+    function showMsg(data) {
+      data = JSON.parse(data)
+
+      var div = document.createElement('div')
+      div.innerHTML = data.msg
+
+      if (data.type === 'enter') {
+        div.style.color = 'blue'
+      } else if (data.type === 'leave') {
+        div.style.color = 'red'
+      }
+
+      document.body.appendChild(div)
+    }
+  </script>
+</body>
+
+</html>

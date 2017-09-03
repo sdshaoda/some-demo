@@ -16,12 +16,12 @@ var server = ws.createServer(function (conn) {
     console.log('Received ' + str)
     var date = new Date()
     var time = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-    broadcast(`${conn.nickName} ${time}: <br>${str}`, 'msg')
+    broadcast(`${conn.nickName} ${time} : <br>${str}`, 'msg')
   })
 
   conn.on('close', function (code, reason) {
     console.log('Connection closed')
-    broadcast(conn.nickName + 'leaved', 'leave')
+    broadcast(conn.nickName + ' leaved', 'leave')
   })
   conn.on('error', function (err) {
     console.log('handle error')
