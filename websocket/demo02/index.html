@@ -14,20 +14,29 @@
   <button id="sendBtn" type="button">发送</button>
   <div id="recv"></div>
   <script>
+    // 实例化一个 WebSocket
     var ws = new WebSocket('ws://localhost:8000/')
+    // 连接
     ws.onopen = function () {
       console.log('websocket open')
       document.querySelector('#recv').innerHTML = 'Connected'
     }
+    // 关闭
     ws.onclose = function () {
       console.log('websocket close')
     }
+    // 接收
     ws.onmessage = function (e) {
       console.log(e.data)
       document.querySelector('#recv').innerHTML = e.data
     }
+    // 错误处理
+    ws.onerror = function (e) {
+      console.log(e.data)
+    }
     document.querySelector('#sendBtn').onclick = function () {
       var text = document.querySelector('#sendText').value
+      // 发送
       ws.send(text)
     }
   </script>
