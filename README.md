@@ -1,6 +1,10 @@
 # some-demo
 There are some demo in this repository.
 
+## Tetris
+
+[俄罗斯方块](https://sdshaoda.github.io/some-demo/Tetris/)
+
 ## mineSweeper
 
 使用JavaScript实现的扫雷
@@ -30,3 +34,7 @@ Canvas五子棋
 ## guaguale
 
 [刮刮乐](https://sdshaoda.github.io/some-demo/guaguale/)
+
+## websocket-demos
+
+chat room
