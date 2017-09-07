@@ -1,4 +1,4 @@
-function Local () {
+function Local() {
   // 游戏对象
   var game
   // 开始

@@ -1,4 +1,4 @@
-function Game (doms) {
+function Game(doms) {
   // DOM 元素
   var gameDiv
   var nextDiv
@@ -37,21 +37,28 @@ function Game (doms) {
   this.init = init
   this.init(doms)
 
-  function init (doms) {
+  function init(doms) {
     gameDiv = doms.gameDiv
     nextDiv = doms.nextDiv
     cur = new Square()
     next = new Square()
     initDiv(gameDiv, gameData, gameDivs)
     initDiv(nextDiv, next.data, nextDivs)
+    cur.origin.x = 10
+    cur.origin.y = 5
+    for (var i = 0; i < cur.data.length; i++) {
+      for (var j = 0; j < cur.data[0].length; j++) {
+        gameData[cur.origin.x + i][cur.origin.y + j] = cur.data[i][j]
+      }
+    }
     refreshDiv(gameData, gameDivs)
     refreshDiv(next.data, nextDivs)
   }
   // 初始化div
-  function initDiv (element, data, divs) {
-    for (var i = 0;i < data.length;i++) {
+  function initDiv(element, data, divs) {
+    for (var i = 0; i < data.length; i++) {
       var div = []
-      for (var j = 0;j < data[0].length;j++) {
+      for (var j = 0; j < data[0].length; j++) {
         var newNode = document.createElement('div')
         newNode.className = 'none'
         newNode.style.top = i * 20 + 'px'
@@ -63,14 +70,14 @@ function Game (doms) {
     }
   }
   // 刷新div
-  function refreshDiv (data, divs) {
-    for (var i = 0; i < data.length;i++) {
-      for (var j = 0; j < data[0].length;j++) {
+  function refreshDiv(data, divs) {
+    for (var i = 0; i < data.length; i++) {
+      for (var j = 0; j < data[0].length; j++) {
         if (data[i][j] == 0) {
           divs[i][j].className = 'none'
-        }else if (data[i][j] == 1) {
+        } else if (data[i][j] == 1) {
           divs[i][j].className = 'done'
-        }else if (data[i][j] == 2) {
+        } else if (data[i][j] == 2) {
           divs[i][j].className = 'current'
         }
       }

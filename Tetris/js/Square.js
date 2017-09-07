@@ -1,4 +1,4 @@
-function Square () {
+function Square() {
   // 方块数据 4*4
   this.data = [
     [0, 2, 0, 0],
