@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Layout</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .clearfix::after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+
+        .layout {
+            margin-top: 50px;
+        }
+
+        .layout article div {
+            min-height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="layout float">
+        <style>
+            .layout.float {
+                overflow: hidden;
+            }
+
+            .layout.float .left {
+                float: left;
+                width: 300px;
+                background: red;
+            }
+
+            .layout.float .center {
+                float: left;
+            }
+
+            .layout.float .right {
+                float: right;
+                width: 300px;
+                background: blue;
+            }
+        </style>
+        <article>
+            <div class="left"></div>
+            <div class="right"></div>
+            <div class="center">
+                <h1>浮动解决方案</h1>
+                <p>1. 这是三栏布局中间部分</p>
+                <p>2. 这是三栏布局中间部分</p>
+                <p>3. 这是三栏布局中间部分</p>
+            </div>
+        </article>
+    </section>
+
+    <section class="layout absolute">
+        <style>
+            .absolute {
+                position: relative;
+            }
+
+            .absolute .left {
+                width: 300px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                background-color: yellow;
+            }
+
+            .absolute .center {
+                position: absolute;
+                top: 0;
+                left: 300px;
+                /* right: 300px; */
+            }
+
+            .absolute .right {
+                width: 300px;
+                position: absolute;
+                top: 0;
+                right: 0;
+                background-color: pink;
+            }
+        </style>
+        <article>
+            <div class="left"></div>
+            <div class="center">
+                <h1>绝对定位解决方案</h1>
+                <p>1. 这是三栏布局中间部分</p>
+                <p>2. 这是三栏布局中间部分</p>
+                <p>3. 这是三栏布局中间部分</p>
+            </div>
+            <div class="right"></div>
+        </article>
+    </section>
+
+    <section class="layout flex">
+        <style>
+            .flex {
+                margin-top: 180px;
+            }
+
+            .flex article {
+                display: flex;
+            }
+
+            .flex .left {
+                display: inline-block;
+                width: 300px;
+                background-color: black;
+            }
+
+            .flex .center {
+                display: inline-block;
+                flex: 1;
+            }
+
+            .flex .right {
+                display: inline-block;
+                width: 300px;
+                background-color: brown;
+            }
+        </style>
+        <article>
+            <div class="left"></div>
+            <div class="center">
+                <h1>Flex解决方案</h1>
+                <p>1. 这是三栏布局中间部分</p>
+                <p>2. 这是三栏布局中间部分</p>
+                <p>3. 这是三栏布局中间部分</p>
+            </div>
+            <div class="right"></div>
+        </article>
+    </section>
+</body>
+
+</html>
