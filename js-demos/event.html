@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Test</title>
+</head>
+
+<body>
+    <button>按钮</button>
+
+    <script>
+        let button = document.querySelector('button')
+
+        let custome = new Event('custome')
+
+        document.body.addEventListener('click', function (event) {
+            event.stopImmediatePropagation()
+            console.log(1)
+            console.log(event.target)
+            console.log(event.currentTarget)
+            console.log(event.currentTarget === this)
+        }, false)
+        button.onclick = function (event) {
+            console.log(2)
+        }
+        button.onclick = function (event) {
+            console.log(3)
+
+            this.dispatchEvent(custome)
+        }
+
+        button.addEventListener('custome', function (e) {
+            console.log(e)
+            console.log('custome')
+        })
+
+        var event = document.createEvent("MouseEvents");
+
+        event.initMouseEvent("click", true, true, document.defaultView, 0, 0, 0, 0, 0,
+            false, false, false, false, 0, null);
+
+        button.dispatchEvent(event);
+    </script>
+</body>
+
+</html>
