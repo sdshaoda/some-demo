@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+  <title>char-balls</title>
+  <style>
+    canvas {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+
+<body>
+  <canvas></canvas>
+
+  <script>
+    const radius = 5 // 粒子半径
+    const colors = ['#33B5E5', '#0099CC', '#AA66CC', '#9933CC', '#99CC00', '#669900', '#FFBB33', '#FF8800', '#FF4444', '#CC0000'] // 粒子颜色
+    let remainTime = 500 // 字母形状保持时间
+    var particles = []
+    // 此处为方便，只演示了 A -> B -> C -> D -> X -> Y -> Z -> A -> ...
+    var chars = ['A', 'B', 'C', 'D', 'X', 'Y', 'Z']
+    var index = 0
+    var digit = {
+      'A': [
+        ['0', '0', '0', '0', '1', '0', '0', '0', '0'],
+        ['0', '0', '0', '1', '1', '1', '0', '0', '0'],
+        ['0', '0', '0', '1', '0', '1', '0', '0', '0'],
+        ['0', '0', '0', '1', '0', '1', '0', '0', '0'],
+        ['0', '0', '1', '0', '0', '0', '1', '0', '0'],
+        ['0', '0', '1', '0', '0', '0', '1', '0', '0'],
+        ['0', '1', '1', '1', '1', '1', '1', '1', '0'],
+        ['0', '1', '0', '0', '0', '0', '0', '1', '0'],
+        ['0', '1', '0', '0', '0', '0', '0', '1', '0'],
+        ['1', '0', '0', '0', '0', '0', '0', '0', '1'],
+      ],
+      'B': [
+        ['0', '1', '1', '1', '1', '0', '0'],
+        ['0', '1', '0', '0', '0', '1', '0'],
+        ['0', '1', '0', '0', '0', '1', '0'],
+        ['0', '1', '0', '0', '1', '0', '0'],
+        ['0', '1', '1', '1', '1', '0', '0'],
+        ['0', '1', '0', '0', '1', '0', '0'],
+        ['0', '1', '0', '0', '0', '1', '0'],
+        ['0', '1', '0', '0', '0', '1', '0'],
+        ['0', '1', '0', '0', '1', '0', '0'],
+        ['0', '1', '1', '1', '1', '0', '0'],
+      ],
+      'C': [
+        ['0', '0', '0', '0', '1', '1', '1'],
+        ['0', '0', '1', '1', '0', '0', '0'],
+        ['0', '0', '1', '0', '0', '0', '0'],
+        ['0', '1', '0', '0', '0', '0', '0'],
+        ['0', '1', '0', '0', '0', '0', '0'],
+        ['0', '1', '0', '0', '0', '0', '0'],
+        ['0', '1', '0', '0', '0', '0', '0'],
+        ['0', '1', '1', '0', '0', '0', '0'],
+        ['0', '0', '1', '1', '0', '0', '0'],
+        ['0', '0', '0', '1', '1', '1', '1'],
+      ],
+      'D': [
+        ['0', '0', '0', '0', '0', '0', '0', '0', '0'],
+        ['0', '1', '1', '1', '1', '1', '0', '0', '0'],
+        ['0', '1', '0', '0', '0', '0', '1', '1', '0'],
+        ['0', '1', '0', '0', '0', '0', '0', '1', '0'],
+        ['0', '1', '0', '0', '0', '0', '0', '0', '1'],
+        ['0', '1', '0', '0', '0', '0', '0', '0', '1'],
+        ['0', '1', '0', '0', '0', '0', '0', '0', '1'],
+        ['0', '1', '0', '0', '0', '0', '0', '0', '1'],
+        ['0', '1', '0', '0', '0', '0', '0', '1', '0'],
+        ['0', '1', '0', '0', '0', '0', '1', '1', '0'],
+        ['0', '1', '1', '1', '1', '1', '0', '0', '0'],
+      ],
+      'X': [
+        ['1', '1', '0', '0', '0', '0', '0', '1'],
+        ['0', '1', '1', '0', '0', '0', '1', '0'],
+        ['0', '1', '1', '0', '0', '1', '0', '0'],
+        ['0', '0', '1', '1', '0', '1', '0', '0'],
+        ['0', '0', '0', '1', '1', '0', '0', '0'],
+        ['0', '0', '0', '1', '1', '0', '0', '0'],
+        ['0', '0', '1', '0', '1', '1', '0', '0'],
+        ['0', '1', '1', '0', '0', '1', '1', '0'],
+        ['0', '1', '1', '0', '0', '1', '1', '0'],
+        ['1', '1', '0', '0', '0', '0', '1', '1'],
+      ],
+      'Y': [
+        ['1', '0', '0', '0', '0', '0', '0', '1'],
+        ['0', '1', '0', '0', '0', '0', '1', '0'],
+        ['0', '0', '1', '0', '0', '0', '1', '0'],
+        ['0', '0', '1', '0', '0', '1', '0', '0'],
+        ['0', '0', '0', '1', '0', '1', '0', '0'],
+        ['0', '0', '0', '0', '1', '0', '0', '0'],
+        ['0', '0', '0', '0', '1', '0', '0', '0'],
+        ['0', '0', '0', '0', '1', '0', '0', '0'],
+        ['0', '0', '0', '0', '1', '0', '0', '0'],
+        ['0', '0', '0', '0', '1', '0', '0', '0'],
+      ],
+      'Z': [
+        ['1', '1', '1', '1', '1', '1', '1', '1'],
+        ['0', '0', '0', '0', '0', '0', '1', '0'],
+        ['0', '0', '0', '0', '0', '1', '0', '0'],
+        ['0', '0', '0', '0', '1', '1', '0', '0'],
+        ['0', '0', '0', '0', '1', '0', '0', '0'],
+        ['0', '0', '0', '1', '0', '0', '0', '0'],
+        ['0', '0', '1', '1', '0', '0', '0', '0'],
+        ['0', '0', '1', '0', '0', '0', '0', '0'],
+        ['0', '1', '0', '0', '0', '0', '0', '0'],
+        ['1', '1', '1', '1', '1', '1', '1', '1'],
+      ],
+    }
+
+    // 获取 canvas
+    var canvas = document.querySelector('canvas')
+    var context = canvas.getContext('2d')
+
+    // 设置宽高
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    setInterval(function () {
+      // 清除画布
+      context.clearRect(0, 0, context.canvas.width, context.canvas.height)
+      // 绘制字母粒子
+      drawChar(context)
+    }, 50)
+
+    // resize 时重设宽高
+    window.onresize = function () {
+      window.timer && clearTimeout(window.timer)
+      window.timer = setTimeout(() => {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+      }, 100)
+    }
+
+
+    function drawChar(cxt) {
+      var offsetX = window.innerWidth / 2 - 100
+      var offsetY = window.innerHeight / 2 - 100
+
+      // 粒子都飞出屏幕外
+      if (particles.length < 2) {
+        // 为方便演示，过滤掉速度非常慢的粒子
+        particles = []
+        // 添加粒子
+        addParticles(chars[index])
+        // 设置下次的字母
+        index++
+        if (index >= chars.length) {
+          index = 0
+        }
+        remainTime = 500
+      }
+      // 绘制粒子
+      renderParticles(cxt)
+      if (remainTime <= 0) {
+        // 更新粒子状态
+        updateParticles()
+      }
+      remainTime -= 50
+    }
+
+    function renderParticles(cxt) {
+      for (var i = 0; i < particles.length; i++) {
+        cxt.beginPath()
+        cxt.fillStyle = particles[i].color
+        cxt.arc(particles[i].offsetX, particles[i].offsetY, radius, 0, 2 * Math.PI)
+        cxt.fill()
+      }
+    }
+
+    function updateParticles() {
+      for (var i = 0; i < particles.length; i++) {
+        var particle = particles[i]
+        particle.offsetX += particle.vx
+        particle.offsetY += particle.vy
+
+        // 去除飞出屏幕外的粒子
+        if (particle.offsetX < radius || particle.offsetX > (window.innerWidth - radius) || particle.offsetY < radius || particle.offsetY > (window.innerHeight - radius)) {
+          particles.splice(i, 1)
+        }
+      }
+    }
+
+    function addParticles(item) {
+      var matrix = digit[item]
+
+      for (var y = 0; y < matrix.length; y++) {
+        for (var x = 0; x < matrix[y].length; x++) {
+          if (matrix[y][x] == 1) {
+            var particle = {
+              offsetX: window.innerWidth / 2 - 50 + radius * 2 * x,
+              offsetY: window.innerHeight / 2 - 50 + radius * 2 * y,
+              color: colors[Math.floor(Math.random() * colors.length)],
+              // 速度 [0, 100]
+              vx: Math.pow(-1, Math.floor(Math.random() * 10)) * Math.random() * 100,
+              vy: Math.pow(-1, Math.floor(Math.random() * 10)) * Math.random() * 100
+            }
+            particles.push(particle)
+          }
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>
