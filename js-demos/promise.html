@@ -11,28 +11,31 @@
 <body>
 
     <script>
+        // Promise 的三种状态
         const PENDING = 'pending'
-        const RESOLVED = 'resolved'
+        const FULFILLED = 'fulfilled'
         const REJECTED = 'rejected'
 
         function MyPromise(fn) {
+            // 保存对象指针
             const that = this
+            // 初始时为 pending
             that.state = PENDING
+            // promise 被解决时传递给回调函数的值
             that.value = null
-            that.resolvedCallbacks = []
+            // (多次)调用 then 中的回调函数
+            that.fulfilledCallbacks = []
             that.rejectedCallbacks = []
 
-            try {
-                fn(resolve, reject)
-            } catch (e) {
-                reject(e)
-            }
-
             function resolve(value) {
+                // 只有 pending 才能改变状态
                 if (that.state === PENDING) {
-                    that.state = RESOLVED
+                    // promise 解决，状态变为 fulfilled
+                    that.state = FULFILLED
+                    // resolve(value) 不可变的终值
                     that.value = value
-                    that.resolvedCallbacks.map(cb => cb(that.value))
+                    // 遍历回调函数
+                    that.fulfilledCallbacks.map(cb => cb(that.value))
                 }
             }
 
@@ -43,17 +46,26 @@
                     that.rejectedCallbacks.map(cb => cb(that.value))
                 }
             }
+
+            try {
+                fn(resolve, reject)
+            } catch (e) {
+                reject(e)
+            }
         }
 
         MyPromise.prototype.then = function (onFulfilled, onRejected) {
             const that = this
+            // fulfilled 时执行的函数
             onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v
+            // rejected 时执行的函数
             onRejected = typeof onRejected === 'function' ? onRejected : r => { throw r }
             if (that.state === PENDING) {
-                that.resolvedCallbacks.push(onFulfilled)
+                // promise 还未解决，把回调函数放入队列中，等待 fulfilled 时依次执行
+                that.fulfilledCallbacks.push(onFulfilled)
                 that.rejectedCallbacks.push(onRejected)
             }
-            if (that.state === RESOLVED) {
+            if (that.state === FULFILLED) {
                 onFulfilled(that.value)
             }
             if (that.state === REJECTED) {
