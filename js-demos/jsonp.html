@@ -14,9 +14,12 @@
         function jsonp(url, jsonpCallback, success) {
             let script = document.createElement('script')
             script.src = url
+            // 立即下载 下载完立即执行
             script.async = true
             script.type = 'text/javascript'
+            // 注册 callbacks 函数
             window[jsonpCallback] = function (data) {
+                // 执行成功的回调
                 success && success(data)
             }
             document.body.appendChild(script)

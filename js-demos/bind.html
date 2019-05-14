@@ -11,15 +11,18 @@
 <body>
 
     <script>
+        // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
+
         Function.prototype.myBind = function (context) {
+            // 判断是不是在函数上调用的 因为可以使用 Function.prototype.bind.call(something) 调用
             if (typeof this !== 'function') {
                 throw new TypeError('Error')
             }
             const _this = this
             const args = [...arguments].slice(1)
-            // 返回一个函数
+            // 返回一个绑定了作用域和参数的函数
             return function F() {
-                // 因为返回了一个函数，我们可以 new F()，所以需要判断
+                // bind 后的函数作为构造函数调用
                 if (this instanceof F) {
                     return new _this(...args, ...arguments)
                 }
