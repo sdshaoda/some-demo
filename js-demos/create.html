@@ -11,12 +11,17 @@
 <body>
 
   <script>
-    function objcet(o) {
+
+    // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/create
+    // 创建一个已经选择了原型的新对象，但没有把 Object.create 的第二个参数考虑在内
+    // 请注意，尽管在 ES5 中 Object.create支持设置为[[Prototype]]为null，但因为那些ECMAScript5以前版本限制，此 polyfill 无法支持该特性
+    Object.prototype.myCreate = function (o) {
       function F() { }
       F.prototype = o
       return new F
     }
 
+    // test
     var person = {
       name: 'sd',
       age: 22,
@@ -24,8 +29,13 @@
         name: 'sd'
       }
     }
+
     var sd = Object.create(person)
+    var test1 = Object.myCreate(person)
+    console.log(sd, test1, test1.__proto__ === sd.__proto__)
     var o = Object.create(null)
+    var test2 = Object.myCreate(null)
+    console.log(o, test2, test2.__proto__ === o.__proto__)
   </script>
 </body>
 
